@@ -1,16 +1,17 @@
 import sys
 import sqlite3
 
-from PyQt5 import uic
 from PyQt5 import QtCore, QtGui, QtWidgets
 from PyQt5.QtWidgets import QApplication, QMainWindow
+from release.main_ui import Ui_MainWindow as MainUI
+from release.add_edit_coffee_form_ui import Ui_MainWindow as AddEditCoffeeFormUI
 
 
-class MainWindow(QMainWindow):
+class MainWindow(QMainWindow, MainUI):
     def __init__(self):
         super().__init__()
-        uic.loadUi('main.ui', self)
-        self.con = sqlite3.connect('coffee.sqlite')
+        self.setupUi(self)
+        self.con = sqlite3.connect('../data/coffee.sqlite')
         self.load_table()
         self.tableWidget.cellDoubleClicked.connect(self.open_film)
         self.pushButton.clicked.connect(self.create_film)
@@ -42,10 +43,10 @@ class MainWindow(QMainWindow):
         coffee_form.show()
 
 
-class AddCoffeeForm(QMainWindow):
+class AddCoffeeForm(QMainWindow, AddEditCoffeeFormUI):
     def __init__(self, root, **kwargs):
         super().__init__(root, **kwargs)
-        uic.loadUi('addEditCoffeeForm.ui', self)
+        self.setupUi(self)
         self.root = root
         self.pushButton.clicked.connect(self.create_coffee)
 
@@ -69,10 +70,10 @@ class AddCoffeeForm(QMainWindow):
             return None
 
 
-class EditCoffeeForm(QMainWindow):
+class EditCoffeeForm(QMainWindow, AddEditCoffeeFormUI):
     def __init__(self, root, **kwargs):
         super().__init__(root, **kwargs)
-        uic.loadUi('addEditCoffeeForm.ui', self)
+        self.setupUi(self)
         self.root = root
         self.pk = 0
         self.pushButton.setText('Обновить')
